@@ -1,10 +1,10 @@
 library speed_test_dart;
 
 import 'dart:async';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'package:http/io_client.dart';
 import 'package:speed_test_dart/classes/classes.dart';
 import 'package:speed_test_dart/constants.dart';
@@ -15,21 +15,20 @@ import 'package:xml/xml.dart';
 /// A Speed tester.
 class SpeedTestDart {
   /// Create a Client for the requests
-  Client createCustomClient({
+  http.Client createCustomClient({
     final String? userAgent = 'AppleWebKit/537.36 (KHTML, like Gecko)',
   }) {
     // Initialize a (lower-level) HttpClient from dart:io with a custom user agent.
-  // (Don't use this directly).
-  final innerClient = HttpClient()
-    ..userAgent = userAgent;
+    // (Don't use this directly).
+    final innerClient = HttpClient()..userAgent = userAgent;
 
-  // Pass the lower-level client into an IOClient object (from the http package).
+    // Pass the lower-level client into an IOClient object (from the http package).
     return IOClient(innerClient);
   }
 
   /// Returns [Settings] from speedtest.net.
   Future<Settings> getSettings() async {
-  final client = createCustomClient();
+    final client = createCustomClient();
 
     final response = await client.get(Uri.parse(configUrl));
     final settings = Settings.fromXMLElement(
@@ -69,7 +68,7 @@ class SpeedTestDart {
     int retryCount = 2,
     int timeoutInSeconds = 2,
   }) async {
-  final client = createCustomClient();
+    final client = createCustomClient();
     List<Server> serversToTest = [];
 
     for (final server in servers) {
